@@ -3,23 +3,21 @@ import { Link } from 'react-router-dom';
 import Cart from '../components/Cart/Cart';
 import ReviewItem from '../components/ReviewItem/ReviewItem';
 import useCart from '../hooks/useCart';
-import useProducts from '../hooks/useProducts';
 import { removeFromDb } from '../utilities/fakedb';
 
 const Orders = () => {
-  const [products, setProducts] = useProducts();
-  const [cart, setCart] = useCart(products);
+  const [cart, setCart] = useCart();
   const handleRemoveProduct = product =>{
-    const rest = cart.filter(pd => pd.id !== product.id);
+    const rest = cart.filter(pd => pd._id !== product._id);
     setCart(rest);
-    removeFromDb(product.id)
+    removeFromDb(product._id)
   }
   return (
     <div className='shop-container'>
       <div className="review-item-container">
         {
              cart.map(product => <ReviewItem
-             key={product.id}
+             key={product._id}
              product={product}
              handleRemoveProduct={handleRemoveProduct}
              ></ReviewItem>)
@@ -27,7 +25,7 @@ const Orders = () => {
       </div>
       <div className="cart-container">
         <Cart 
-        key={cart.id}
+        key={cart._id}
         cart={cart}
         >
           <Link to='/shipment'>
